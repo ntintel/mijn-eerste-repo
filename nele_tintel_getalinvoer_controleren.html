@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Getalinvoer controleren</title>
+</head>
+<body>
+	<script>
+
+		"use strict";
+
+		let ArrayGetallen = [ ];
+		let aantal = prompt ('Hoeveel getallen wil je ingeven?');
+
+
+		let ControleAantal = ingave => {
+			let fout = false;
+			if (ingave == null) {
+            document.write (`<p>U hebt geannuleerd</p>`);
+            fout = true;
+        }
+        else if (ingave.length == 0) {
+            document.write (`<p>U heeft niets ingevuld</p>`);
+            fout = true;
+        }
+        else if (isNaN(ingave) == false) {
+               document.write (`${ingave}`);
+               return ingave;
+        }
+        else {
+            document.write (`<p>Dit is geen correcte ingave</p>`); 
+            return 0;
+        }
+    }
+    
+
+		
+
+		aantal = ControleAantal(aantal);
+
+
+		
+	</script>
+</body>
+</html>
