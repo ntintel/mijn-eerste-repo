@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title></title>
+	<style type="text/css">
+		.error{
+			color:red;
+		}
+
+		label{
+			display: inline-block;
+			text-align:right;
+			width:200px;
+		}
+
+	</style>
+</head>
+<body>
+	<form id="formulier">
+		<p>
+			<label for="voornaam">Voornaam:</label>
+			<input type="text"  id="voornaam"/>
+			<span class="error" id="voornaam_error"></span>
+		</p>
+		<p>
+			<label for="achternaam" >Achternaam:</label> 
+			<input type="text"  id="achternaam"/>
+			<span class="error" id="achternaam_error"> </span>
+		</p>
+		<p>
+			<label for="straat">Straat:</label><input type="text" id="straat"/>
+			<span class="error" id="straat_error"></span>
+		</p>
+		<p>
+			<label for="straatnummer">Nummer:</label><input type="text"  id="straatnummer"/>
+			<span class="error" id="straatnummer_error"></span>
+		</p>
+
+		<p>
+			<label for="postcode">Postcode:</label><input type="text"  id="postcode"/>
+			<span class="error" id="postcode_error"></span>
+		</p>
+
+		<p>
+			<label for="email">Email:</label><input type="text"  id="email"/>
+			<span class="error" id="email_error"></span>
+		</p>
+
+		<p>
+			<label for="wachtwoord">Wachtwoord:</label>
+			<input type="text" id="wachtwoord"/>
+			<span class="error" id="wachtwoord_error"></span>
+		</p>
+		<p>
+			<label for="wachtwoordBevestiging">Herhaal wachtwoord:</label>
+			<input type="text"  id="wachtwoordBevestiging"/>
+			<span class="error" id="wachtwoordBevestiging_error"></span>
+		</p>
+
+		<p>
+			<label for="wagen">Keuze bedrijfswagen?</label>
+			<select name="wagen" id="wagen">
+				<option value="">Selecteer</option>
+				<option value="volkswagen">Volkswagen</option>
+				<option value="mercedes">Mercedes</option>
+				<option value="renault">Renault</option>
+				<option value="citroen">Citro&euml;n</option>
+			</select>
+			<span class="error" id="wagen_error"></span>
+		</p>
+
+		<p>
+			<label>Win welke toestel(len)?</label><span class="error" id="winToestel_error"></span><br>
+			<input type="checkbox" name="winToestel" class="winToestelClass">iPhone<br>
+			<input type="checkbox" name="winToestel" class="winToestelClass">iPad<br>
+			<input type="checkbox" name="winToestel" class="winToestelClass">iMac<br>
+		</p>
+
+
+
+
+
+
+		<p>
+			<input type="button" value="Verstuur" id="knop_verstuur" onclick="verstuur()" />
+		</p>
+	</form>
+	<script type="text/javascript">
+		"use strict";
+		let voornaamTxt;
+		let achternaamTxt;
+		let straatTxt;
+		let straatnummerTxt;
+		let postcodeTxt;
+		let emailTxt;
+		let wachtwoordTxt;
+		let wachtwoordBevestigingTxt;
+		let geselecteerdeWagen;
+		let wagenTxt;
+		let alleWinToestelArray;
+		let telSelectedWinToestel;
+		let winIphone;
+		let winIpad;
+		let winImac;
+
+		let allesCorrectIngevuld=true;
+		//var die bijhoudt of er ergens een fout is of niet 
+
+		function controleerVoorwaardenVoornaam(){
+			if(voornaamTxt.length < 2 ){
+				document.getElementById("voornaam_error").innerHTML="Minstens 2 karakters lang!";
+				allesCorrectIngevuld = false;
+			}
+			else{
+				document.getElementById("voornaam_error").innerHTML="";
+			}
+		}
+
+		function controleerVoorwaardenAchternaam(){
+			if(achternaamTxt.length < 2 ){ 
+				document.getElementById("achternaam_error").innerHTML="Minstens 2 karakters lang!";
+				allesCorrectIngevuld = false;
+			}
+			else{
+				document.getElementById("achternaam_error").innerHTML="";
+			}
+		}
+
+		function controleerVoorwaardenStraat(){
+			if((straatTxt).length < 2 ){
+				document.getElementById("straat_error").innerHTML="Minstens 2 karakters lang!";
+				allesCorrectIngevuld = false;
+			}
+			else{
+				document.getElementById("straat_error").innerHTML="";
+			}
+		}
+
+		function controleerVoorwaardenStraatnummer(){
+			if(straatnummerTxt.search(/^\d/) == -1){
+				document.getElementById("straatnummer_error").innerHTML="Minstens 1 cijfer!";
+				allesCorrectIngevuld = false;
+			}
+			else{
+				document.getElementById("straatnummer_error").innerHTML="";
+			}
+		}
+
+		function controleerVoorwaardenPostcode(){
+			if(postcodeTxt.search(/^[1-9]\d{3}$/) == -1){
+				document.getElementById("postcode_error").innerHTML="Foutieve postcode!";
+				allesCorrectIngevuld = false;
+			}
+			else{
+				document.getElementById("postcode_error").innerHTML="";
+			}
+		}
+
+		function controleerVoorwaardenEmail(){
+			let regExp=/^[A-Za-z][\.A-Za-z0-9+_-]+@[\.A-Za-z0-9-]+\.[A-Za-z]{2,20}$/;
+			if(regExp.test(emailTxt) == false){
+				document.getElementById("email_error").innerHTML="Dit is niet correct!";
+				allesCorrectIngevuld = false;
+			}
+			else{
+				document.getElementById("email_error").innerHTML="";
+			}    
+		}
+
+		function controleerVoorwaardenWachtwoord(){
+			if (wachtwoordTxt.length < 7) {
+				document.getElementById("wachtwoord_error").innerHTML="Minstens 7 karakters";
+				allesCorrectIngevuld = false;
+			}
+			else if (wachtwoordTxt.length > 20) {
+				document.getElementById("wachtwoord_error").innerHTML="Max 20 karakters";
+				allesCorrectIngevuld = false;
+			} 
+			else if (wachtwoordTxt.search(/\d/) == -1){
+				document.getElementById("wachtwoord_error").innerHTML="Minstens 1 cijfer";
+				allesCorrectIngevuld = false;
+			} 
+			else if (wachtwoordTxt.search(/[a-zA-Z]/) == -1) {
+				document.getElementById("wachtwoord_error").innerHTML="Minstens 1 letter";
+				allesCorrectIngevuld = false;
+			}
+			else{
+				document.getElementById("wachtwoord_error").innerHTML="";
+			}
+		}
+
+		function controleerVoorwaardenWachtwoordBevestiging(){    
+			if(wachtwoordTxt!=wachtwoordBevestigingTxt){
+				document.getElementById("wachtwoordBevestiging_error").innerHTML="Komt niet overeen!";
+				allesCorrectIngevuld = false;
+			}
+			else{
+				document.getElementById("wachtwoordBevestiging_error").innerHTML="";
+			}
+		}
+
+
+
+
+
+
+
+		function verstuur(){
+			voornaamTxt=document.getElementById("voornaam").value;
+			achternaamTxt=document.getElementById("achternaam").value;  
+			straatTxt=document.getElementById("straat").value;
+			straatnummerTxt=document.getElementById("straatnummer").value;
+			postcodeTxt=document.getElementById("postcode").value;
+			emailTxt=document.getElementById("email").value;
+			wachtwoordTxt= document.getElementById("wachtwoord").value;
+			wachtwoordBevestigingTxt=document.getElementById("wachtwoordBevestiging").value;
+			geselecteerdeWagen = document.getElementById("wagen").selectedIndex;
+			wagenTxt=document.getElementById("wagen").value;
+			alleWinToestelArray=document.getElementsByClassName('winToestelClass');
+			console.log(alleWinToestelArray);
+			//getElementsByClassName geeft een array van al de elementen
+
+			//ook de telling van hoeveel toestellen om te winnen moet terug 0 worden
+			telSelectedWinToestel=0;
+			//Via JS vraag je het element uit de webpagina op met de id voornaam. Van dat element vraag je de value op, de inhoud
+			allesCorrectIngevuld=true;
+			//als er op de knop geklikt wordt, moet het bijhouden van de fouten gereset worden
+			if(voornaamTxt.length==0){
+				document.getElementById("voornaam_error").innerHTML="Vul in a.u.b.";
+				allesCorrectIngevuld = false;
+			}
+			else	{
+    			//aparte functie aanmaken om de voorwaarden te controleren
+    			controleerVoorwaardenVoornaam();
+    		}
+
+			//controle achternaam ingevuld
+			if(achternaamTxt.length==0){
+				document.getElementById("achternaam_error").innerHTML="Vul in a.u.b.";
+				allesCorrectIngevuld = false;
+			}
+			else{
+				controleerVoorwaardenAchternaam();
+			}
+
+			//controle straat ingevuld
+			if(straatTxt.length==0){
+				document.getElementById("straat_error").innerHTML="Vul in a.u.b.";
+				allesCorrectIngevuld = false;
+			}
+			else{
+				controleerVoorwaardenStraat();
+			}
+
+			//controle straatnummer ingevuld
+			if(straatnummerTxt.length==0){
+				document.getElementById("straatnummer_error").innerHTML="Vul in a.u.b.";
+				allesCorrectIngevuld = false;
+			}
+			else{
+				controleerVoorwaardenStraatnummer();
+			}
+
+			//controle postcode ingevuld
+			if(postcodeTxt.length==0){
+				document.getElementById("postcode_error").innerHTML="Vul in a.u.b.";
+				allesCorrectIngevuld = false;
+			}
+			else{
+				controleerVoorwaardenPostcode();
+			}
+
+
+			//controle email ingevuld
+			if(emailTxt.length==0){
+				document.getElementById("email_error").innerHTML="Vul in a.u.b.";
+				allesCorrectIngevuld = false;
+			}
+			else{
+				controleerVoorwaardenEmail();
+			}
+
+			if(wachtwoordTxt.length==0){
+				document.getElementById("wachtwoord_error").innerHTML="Vul in a.u.b.";
+				allesCorrectIngevuld = false;
+			}
+			else{
+				controleerVoorwaardenWachtwoord();
+			}
+
+			//controle wachtwoordbevestiging ingevuld
+			if(wachtwoordBevestigingTxt.length==0){
+				document.getElementById("wachtwoordBevestiging_error").innerHTML="Vul in a.u.b.";
+				allesCorrectIngevuld = false;
+			}
+			else{
+				controleerVoorwaardenWachtwoordBevestiging();
+			}
+
+			if(geselecteerdeWagen==0){
+				document.getElementById("wagen_error").innerHTML="Kies a.u.b.";
+				allesCorrectIngevuld = false;
+			}
+			else{
+				document.getElementById("wagen_error").innerHTML="";
+			}
+
+//controle te winnen toestellen
+//alle checkboxen uit array overlopen en kijken of die aangevinkt is
+let lengte=alleWinToestelArray.length
+for (let i = 0; i < lengte; i++){
+	if (alleWinToestelArray[i].checked){
+		telSelectedWinToestel++;
+	}
+}
+if(telSelectedWinToestel == 0){
+	document.getElementById("winToestel_error").innerHTML="Kies a.u.b. minstens 1";
+	allesCorrectIngevuld = false;
+}
+else{
+	document.getElementById("winToestel_error").innerHTML="";
+
+	winIphone="win iPhone = " + alleWinToestelArray[0].checked;    
+	winIpad="win iPad = " + alleWinToestelArray[1].checked;
+	winImac="win iMac = " + alleWinToestelArray[2].checked;
+// alert(winIphone + " " + winIpad + " " + winImac);
+}
+
+
+
+			//uiteindelijk controleren of alles correct is
+			//deze if blijft altijd allerlaatst in de verstuur() functie
+
+			if(allesCorrectIngevuld){
+
+                let link = "mailto:" + encodeURIComponent("info@cvo.be")
+                + "?cc=" + encodeURIComponent("kopie@cvo.be")
+                + "&subject=" + encodeURIComponent("Formulier validatie")
+                + "&body=" 
+                + "voornaam:" 
+                + encodeURIComponent(voornaamTxt) 
+                + encodeURIComponent("\r\n\n")
+                + "achternaam:" 
+                + encodeURIComponent(achternaamTxt) 
+                + encodeURIComponent("\r\n\n") 
+                + "postcode:"
+                + encodeURIComponent(postcodeTxt)
+                + encodeURIComponent("\r\n\n")
+                + "straat:"
+                + encodeURIComponent(straatTxt)
+                + "straatnummer:"
++ encodeURIComponent(straatnummerTxt)  
+                + encodeURIComponent("\r\n\n")
+                + "email:"
+                + encodeURIComponent(emailTxt)
+                + encodeURIComponent("\r\n\n")
++ "wachtwoord:"                
++ encodeURIComponent(wachtwoordTxt)
+                + encodeURIComponent("\r\n\n")
+                + "wagen:"
+                + encodeURIComponent(wagenTxt)
+                + encodeURIComponent("\r\n\n")
+                + "winIphone:"
+                + encodeURIComponent(winIphone)
+                + encodeURIComponent("\r\n\n")
+                + "winIpad:"
+                + encodeURIComponent(winIpad)
+                + encodeURIComponent("\r\n\n")
+                + "winImac:"
+                + encodeURIComponent(winImac)
+                + encodeURIComponent("\r\n\n");
+                window.location.href = link;
+            
+			}
+		}//einde verstuur()
+
+	</script>
+</body>
+</html>
